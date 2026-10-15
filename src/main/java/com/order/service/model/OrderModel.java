@@ -1,0 +1,47 @@
+package com.order.service.model;
+
+import java.time.LocalDateTime;
+
+import com.order.service.dto.OrderDto;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "order")
+public class OrderModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
+    @Column(name = "customerName", columnDefinition = "varchar(80)")
+    private String customerName;
+    @Column(name = "serviceDescription", columnDefinition = "text")
+    private String serviceDescription;
+    @Column(name = "status", columnDefinition = "varchar(20)")
+    private String status;
+    @Column(name = "createdAt")
+    private LocalDateTime createdAt;
+
+    public OrderModel(String id, String customerName, String serviceDescription, String status,
+            LocalDateTime createdAt) {
+        this.id = id;
+        this.customerName = customerName;
+        this.serviceDescription = serviceDescription;
+        this.status = status;
+        this.createdAt = createdAt;
+    }
+
+    public OrderDto toDto() {
+        return new OrderDto(
+                this.id,
+                this.customerName,
+                this.serviceDescription,
+                this.status,
+                this.createdAt);
+    }
+
+}
