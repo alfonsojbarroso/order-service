@@ -12,12 +12,15 @@ import com.order.service.repository.OrderRepository;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderProducerService orderProducerService;
 
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository, OrderProducerService orderProducerService) {
         this.orderRepository = orderRepository;
+        this.orderProducerService = orderProducerService;
     }
 
     public OrderDto save(OrderDto orderDto) {
+        OrderDto producedOrderDto = orderProducerService.createOrder(orderDto);
         return orderRepository.save(orderDto.toModel()).toDto();
     }
 
