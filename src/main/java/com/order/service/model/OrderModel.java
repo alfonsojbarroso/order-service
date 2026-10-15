@@ -26,6 +26,9 @@ public class OrderModel {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    public OrderModel() {
+    }
+
     public OrderModel(String id, String customerName, String serviceDescription, String status,
             LocalDateTime createdAt) {
         this.id = id;

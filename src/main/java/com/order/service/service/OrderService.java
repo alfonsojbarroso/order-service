@@ -17,6 +17,10 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
+    public OrderDto save(OrderDto orderDto) {
+        return orderRepository.save(orderDto.toModel()).toDto();
+    }
+
     public List<OrderDto> fetchAll() {
         return orderRepository.findAll().stream().map(OrderModel::toDto).toList();
     }
