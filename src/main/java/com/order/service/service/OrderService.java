@@ -25,4 +25,8 @@ public class OrderService {
         return orderRepository.findAll().stream().map(OrderModel::toDto).toList();
     }
 
+    public OrderDto findById(String id) {
+        return orderRepository.findById(id).get().toDto();
+    }
+
 }

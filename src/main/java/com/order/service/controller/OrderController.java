@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.order.service.dto.OrderDto;
@@ -33,6 +34,12 @@ public class OrderController {
     public ResponseEntity<?> findAll() {
         List<OrderDto> list = orderService.fetchAll();
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/by-id")
+    public ResponseEntity<?> findById(@RequestParam(name = "id") String id) {
+        OrderDto dto = orderService.findById(id.trim());
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
 }
