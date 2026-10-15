@@ -3,6 +3,7 @@ package com.order.service.dto;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.order.service.enums.OrderStatus;
 import com.order.service.model.OrderModel;
 
 public record OrderDto(
@@ -13,6 +14,7 @@ public record OrderDto(
         @JsonIgnore LocalDateTime createdAt) {
 
     public OrderDto {
+        status = OrderStatus.IN_PROGRESS.getDescription();
         createdAt = LocalDateTime.now();
     }
 
