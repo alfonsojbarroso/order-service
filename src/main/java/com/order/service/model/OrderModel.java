@@ -12,18 +12,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 public class OrderModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    @Column(name = "customerName", columnDefinition = "varchar(80)")
+    @Column(name = "customer_name", columnDefinition = "varchar(80)")
     private String customerName;
-    @Column(name = "serviceDescription", columnDefinition = "text")
+    @Column(name = "service_description", columnDefinition = "text")
     private String serviceDescription;
     @Column(name = "status", columnDefinition = "varchar(20)")
     private String status;
-    @Column(name = "createdAt")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public OrderModel(String id, String customerName, String serviceDescription, String status,

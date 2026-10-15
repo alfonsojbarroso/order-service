@@ -1,6 +1,9 @@
 server:
   port: 8080
 
+url:
+  order: orders
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/orders
