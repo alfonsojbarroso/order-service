@@ -7,6 +7,7 @@ import com.order.service.model.OrderModel;
 
 public record OrderResponseDto(
         String id,
+        Integer customerId,
         String customerName,
         String serviceDescription,
         String status,
@@ -18,7 +19,7 @@ public record OrderResponseDto(
     }
 
     public OrderModel toModel() {
-        return new OrderModel(id, customerName, serviceDescription, status, createdAt);
+        return new OrderModel(id, customerId, customerName, serviceDescription, status, createdAt);
     }
 
 }

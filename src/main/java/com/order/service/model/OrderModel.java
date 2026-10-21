@@ -17,6 +17,8 @@ public class OrderModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    @Column(name = "customer_id", columnDefinition = "int")
+    private Integer customerId;
     @Column(name = "customer_name", columnDefinition = "varchar(80)")
     private String customerName;
     @Column(name = "service_description", columnDefinition = "text")
@@ -29,9 +31,10 @@ public class OrderModel {
     public OrderModel() {
     }
 
-    public OrderModel(String id, String customerName, String serviceDescription, String status,
+    public OrderModel(String id, Integer customerId, String customerName, String serviceDescription, String status,
             LocalDateTime createdAt) {
         this.id = id;
+        this.customerId = customerId;
         this.customerName = customerName;
         this.serviceDescription = serviceDescription;
         this.status = status;
@@ -41,6 +44,7 @@ public class OrderModel {
     public OrderResponseDto toRequestDto() {
         return new OrderResponseDto(
                 this.id,
+                this.customerId,
                 this.customerName,
                 this.serviceDescription,
                 this.status,

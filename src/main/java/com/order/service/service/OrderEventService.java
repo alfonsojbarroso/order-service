@@ -1,5 +1,6 @@
 package com.order.service.service;
 
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,13 @@ public class OrderEventService {
     }
 
     public OrderRequestDto createOrder(OrderRequestDto orderRequestDto) {
-        kafkaTemplate.send("service-requested-topic", orderRequestDto);
+        kafkaTemplate.send(createProducerRecord(orderRequestDto));
         return orderRequestDto;
+    }
+
+    private ProducerRecord<String, OrderRequestDto> createProducerRecord(OrderRequestDto orderRequestDto) {
+        return new ProducerRecord<>("service-requested-topic", orderRequestDto.customerId().toString(),
+                orderRequestDto);
     }
 
 }
