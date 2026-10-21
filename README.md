@@ -8,6 +8,7 @@ are persisted in PostgreSQL. The project uses Java 21 and Spring Boot 4.1.1.
 - **Language/runtime:** Java 21
 - **Application framework:** Spring Boot 4.1.1
 - **REST API:** Spring WebFlux starter with annotated Spring REST controllers
+- **API documentation:** springdoc OpenAPI 3.0.0 with Swagger UI
 - **Persistence:** Spring Data JPA and Hibernate
 - **Database:** PostgreSQL
 - **Messaging:** Spring for Apache Kafka; the producer serializes order DTOs as JSON
@@ -95,6 +96,22 @@ to change an order's status.
 `service-requested-topic` topic. Kafka is configured at `localhost:9092`.
 Publishing is not currently invoked by the REST controller's create endpoint;
 creating an order through `POST /orders` saves it to PostgreSQL only.
+
+## API Documentation
+
+The project uses springdoc OpenAPI to generate API documentation from the
+controller mappings and OpenAPI annotations. Once the service is running, open
+Swagger UI at:
+
+```text
+http://localhost:8080/swagger-ui.html
+```
+
+The generated OpenAPI JSON is available at:
+
+```text
+http://localhost:8080/v3/api-docs
+```
 
 ## Tests
 
