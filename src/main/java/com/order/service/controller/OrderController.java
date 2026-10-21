@@ -16,37 +16,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.order.service.dto.OrderRequestDto;
 import com.order.service.dto.OrderResponseDto;
-import com.order.service.service.IdempotencyService;
-import com.order.service.service.OrderService;
+import com.order.service.exception.BusinessException;
+import com.order.service.service.OrderService;;
 
 @RestController
 @RequestMapping("${url.order}")
 @Tag(name = "Orders", description = "Order management endpoints")
 public class OrderController {
 
-    private final IdempotencyService idempotencyService;
     private final OrderService orderService;
 
-    public OrderController(OrderService orderService, IdempotencyService idempotencyService) {
-        this.idempotencyService = idempotencyService;
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 
     @PostMapping
     @Operation(summary = "Create an order", description = "Saves a new order and returns the created order.")
     public ResponseEntity<?> save(@RequestHeader("idempotency-key") String idempotencyKey,
-            @RequestBody OrderRequestDto orderRequestDto) {
-
-        boolean acquired = idempotencyService.acquireLock(idempotencyKey);
-        if (!acquired) {
-            String cachedResponse = idempotencyService.getStoredResponse(idempotencyKey);
-
-            if ("PROCESSING".equals(cachedResponse)) {
-                return ResponseEntity.status(425).body("{\"error\": \"Petición en proceso. Intente de nuevo.\" }");
-            }
-            return ResponseEntity.ok(cachedResponse);
-        }
-        OrderResponseDto dto = orderService.createOrder(orderRequestDto);
+            @RequestBody OrderRequestDto orderRequestDto) throws BusinessException {
+        OrderResponseDto dto = orderService.createOrder(idempotencyKey, orderRequestDto);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 

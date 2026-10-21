@@ -15,7 +15,7 @@ public record OrderRequestDto(
         @JsonIgnore LocalDateTime createdAt) {
 
     public OrderRequestDto {
-        status = OrderStatus.IN_PROGRESS.getDescription();
+        status = OrderStatus.PROCESSING.toString();
         createdAt = LocalDateTime.now();
     }
 

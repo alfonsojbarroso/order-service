@@ -14,7 +14,7 @@ public record OrderResponseDto(
         LocalDateTime createdAt) {
 
     public OrderResponseDto {
-        status = OrderStatus.IN_PROGRESS.getDescription();
+        status = OrderStatus.PROCESSING.toString();
         createdAt = LocalDateTime.now();
     }
 
