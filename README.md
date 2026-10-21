@@ -26,6 +26,15 @@ the request, service, repository, and database interactions.
 - Java 21
 - PostgreSQL, with a database named `orders`
 - Apache Kafka at `localhost:9092` if using the Kafka producer
+  
+  ```Shell
+  docker run -d --name kafka-broker -p 9092:9092 apache/kafka:latest
+  ```
+
+- Redis at `localhost:6379`
+  ```Shell
+  docker run -d --name redis -p 6379:6379 redis:latest
+  ```
 
 The default configuration is in `src/main/resources/application.yaml`. It uses
 port `8080`, connects to `jdbc:postgresql://localhost:5432/orders` as
@@ -60,6 +69,7 @@ Request body:
 
 ```json
 {
+  "customerId": 1,
   "customerName": "Alex Morgan",
   "serviceDescription": "Replace a damaged screen"
 }

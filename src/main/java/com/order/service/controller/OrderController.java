@@ -9,12 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.order.service.dto.OrderRequestDto;
 import com.order.service.dto.OrderResponseDto;
+import com.order.service.service.IdempotencyService;
 import com.order.service.service.OrderService;
 
 @RestController
@@ -22,15 +24,28 @@ import com.order.service.service.OrderService;
 @Tag(name = "Orders", description = "Order management endpoints")
 public class OrderController {
 
+    private final IdempotencyService idempotencyService;
     private final OrderService orderService;
 
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, IdempotencyService idempotencyService) {
+        this.idempotencyService = idempotencyService;
         this.orderService = orderService;
     }
 
     @PostMapping
     @Operation(summary = "Create an order", description = "Saves a new order and returns the created order.")
-    public ResponseEntity<?> save(@RequestBody OrderRequestDto orderRequestDto) {
+    public ResponseEntity<?> save(@RequestHeader("idempotency-key") String idempotencyKey,
+            @RequestBody OrderRequestDto orderRequestDto) {
+
+        boolean acquired = idempotencyService.acquireLock(idempotencyKey);
+        if (!acquired) {
+            String cachedResponse = idempotencyService.getStoredResponse(idempotencyKey);
+
+            if ("PROCESSING".equals(cachedResponse)) {
+                return ResponseEntity.status(425).body("{\"error\": \"Petición en proceso. Intente de nuevo.\" }");
+            }
+            return ResponseEntity.ok(cachedResponse);
+        }
         OrderResponseDto dto = orderService.createOrder(orderRequestDto);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
