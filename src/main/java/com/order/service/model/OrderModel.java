@@ -2,7 +2,6 @@ package com.order.service.model;
 
 import java.time.LocalDateTime;
 
-import com.order.service.dto.OrderRequestDto;
 import com.order.service.dto.OrderResponseDto;
 
 import jakarta.persistence.Column;

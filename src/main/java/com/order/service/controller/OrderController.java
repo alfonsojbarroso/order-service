@@ -15,37 +15,37 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.order.service.dto.OrderRequestDto;
 import com.order.service.dto.OrderResponseDto;
-import com.order.service.service.OrderDataService;
+import com.order.service.service.OrderService;
 
 @RestController
 @RequestMapping("${url.order}")
 @Tag(name = "Orders", description = "Order management endpoints")
 public class OrderController {
 
-    private final OrderDataService orderDataService;
+    private final OrderService orderService;
 
-    public OrderController(OrderDataService orderDataService) {
-        this.orderDataService = orderDataService;
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
     }
 
     @PostMapping
     @Operation(summary = "Create an order", description = "Saves a new order and returns the created order.")
     public ResponseEntity<?> save(@RequestBody OrderRequestDto orderRequestDto) {
-        OrderResponseDto dto = orderDataService.save(orderRequestDto);
+        OrderResponseDto dto = orderService.createOrder(orderRequestDto);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping
     @Operation(summary = "Get all orders", description = "Returns all orders.")
     public ResponseEntity<?> findAll() {
-        List<OrderResponseDto> list = orderDataService.fetchAll();
+        List<OrderResponseDto> list = orderService.fetchAll();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/by-id")
     @Operation(summary = "Get an order by ID", description = "Returns the order matching the supplied ID.")
     public ResponseEntity<?> findById(@RequestParam(name = "id") String id) {
-        OrderResponseDto dto = orderDataService.findById(id.trim());
+        OrderResponseDto dto = orderService.findById(id.trim());
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
