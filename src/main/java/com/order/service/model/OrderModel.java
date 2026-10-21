@@ -2,7 +2,8 @@ package com.order.service.model;
 
 import java.time.LocalDateTime;
 
-import com.order.service.dto.OrderDto;
+import com.order.service.dto.OrderRequestDto;
+import com.order.service.dto.OrderResponseDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,8 +39,8 @@ public class OrderModel {
         this.createdAt = createdAt;
     }
 
-    public OrderDto toDto() {
-        return new OrderDto(
+    public OrderResponseDto toRequestDto() {
+        return new OrderResponseDto(
                 this.id,
                 this.customerName,
                 this.serviceDescription,

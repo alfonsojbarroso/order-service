@@ -13,38 +13,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.order.service.dto.OrderDto;
-import com.order.service.service.OrderService;
+import com.order.service.dto.OrderRequestDto;
+import com.order.service.dto.OrderResponseDto;
+import com.order.service.service.OrderDataService;
 
 @RestController
 @RequestMapping("${url.order}")
 @Tag(name = "Orders", description = "Order management endpoints")
 public class OrderController {
 
-    private final OrderService orderService;
+    private final OrderDataService orderDataService;
 
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
+    public OrderController(OrderDataService orderDataService) {
+        this.orderDataService = orderDataService;
     }
 
     @PostMapping
     @Operation(summary = "Create an order", description = "Saves a new order and returns the created order.")
-    public ResponseEntity<?> save(@RequestBody OrderDto orderDto) {
-        OrderDto dto = orderService.save(orderDto);
+    public ResponseEntity<?> save(@RequestBody OrderRequestDto orderRequestDto) {
+        OrderResponseDto dto = orderDataService.save(orderRequestDto);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping
     @Operation(summary = "Get all orders", description = "Returns all orders.")
     public ResponseEntity<?> findAll() {
-        List<OrderDto> list = orderService.fetchAll();
+        List<OrderResponseDto> list = orderDataService.fetchAll();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/by-id")
     @Operation(summary = "Get an order by ID", description = "Returns the order matching the supplied ID.")
     public ResponseEntity<?> findById(@RequestParam(name = "id") String id) {
-        OrderDto dto = orderService.findById(id.trim());
+        OrderResponseDto dto = orderDataService.findById(id.trim());
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 

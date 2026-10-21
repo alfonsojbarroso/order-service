@@ -18,6 +18,8 @@ are persisted in PostgreSQL. The project uses Java 21 and Spring Boot 4.1.1.
 
 The application follows a layered structure: the REST controller delegates to
 the order service, which uses a Spring Data repository for persistence.
+See the [order-service sequence diagram](docs/order-service-sequence.md) for
+the request, service, repository, and database interactions.
 
 ## Requirements
 
