@@ -2,13 +2,13 @@ server:
   port: 8080
 
 url:
-  order: orders
+  order:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/orders
-    username: postgres
-    password: root
+    url: jdbc:postgresql://localhost:5432/<database>
+    username: <username>
+    password: <password>
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -20,7 +20,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: <host:port>
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -31,4 +31,4 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "*"
-      topic: "service-requested-topic"
+      topic: <topic>

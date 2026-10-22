@@ -16,7 +16,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record OrderRequestDto(
         @JsonIgnore String id,
-        @NotNull(message = CUSTOMER_ID_ERROR) @Min(value = 0, message = CUSTOMER_ID_ERROR) Integer customerId,
+        @NotNull(message = CUSTOMER_ID_ERROR) @Min(value = 1, message = CUSTOMER_ID_ERROR) Integer customerId,
         @NotBlank(message = CUSTOMER_NAME_ERROR) String customerName,
         @NotBlank(message = DESCRIPTION_ERROR) String serviceDescription,
         @JsonIgnore String status,
