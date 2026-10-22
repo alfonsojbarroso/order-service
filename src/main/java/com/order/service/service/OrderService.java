@@ -40,7 +40,7 @@ public class OrderService {
         }
 
         OrderResponseDto orderResponseDto = orderDataService.save(orderRequestDto);
-        orderEventService.createOrder(orderRequestDto);
+        orderEventService.createOrder(idempotencyKey, orderRequestDto);
         return orderResponseDto;
     }
 

@@ -1,5 +1,7 @@
 package com.order.service.service;
 
+import static com.order.service.constants.Constants.IDEMPOTENCY_PREFIX;
+
 import java.time.Duration;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -17,19 +19,19 @@ public class IdempotencyService {
     }
 
     public boolean acquireLock(String idempotencyKey) {
-        String redisKey = "idempotency:" + idempotencyKey;
+        String redisKey = IDEMPOTENCY_PREFIX + idempotencyKey;
         Boolean isNew = stringRedisTemplate.opsForValue()
                 .setIfAbsent(redisKey, OrderStatus.PROCESSING.toString(), Duration.ofHours(24));
         return Boolean.TRUE.equals(isNew);
     }
 
     public void saveResponse(String idempotencyKey, String jsonResponse) {
-        String redisKey = "idempotency:" + idempotencyKey;
+        String redisKey = IDEMPOTENCY_PREFIX + idempotencyKey;
         stringRedisTemplate.opsForValue().set(redisKey, jsonResponse, Duration.ofHours(24));
     }
 
     public String getStoredResponse(String idempotencyKey) {
-        String redisKey = "idempotency:" + idempotencyKey;
+        String redisKey = IDEMPOTENCY_PREFIX + idempotencyKey;
         return stringRedisTemplate.opsForValue().get(redisKey);
     }
 

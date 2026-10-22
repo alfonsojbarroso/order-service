@@ -32,10 +32,3 @@ spring:
       properties:
         spring.json.trusted.packages: "*"
       topic: "service-requested-topic"
-
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      # password: root
-      timeout: 60000
