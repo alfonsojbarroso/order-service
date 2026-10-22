@@ -1,7 +1,6 @@
 package com.order.service.controller;
 
 import java.util.List;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -14,27 +13,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.order.service.dto.HeaderDto;
 import com.order.service.dto.OrderRequestDto;
 import com.order.service.dto.OrderResponseDto;
 import com.order.service.exception.BusinessException;
-import com.order.service.service.OrderService;;
+import com.order.service.service.OrderService;
+import com.order.service.util.ValidateUtil;;
 
 @RestController
 @RequestMapping("${url.order}")
 @Tag(name = "Orders", description = "Order management endpoints")
 public class OrderController {
 
+    private final ValidateUtil validateUtil;
     private final OrderService orderService;
 
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, ValidateUtil validateUtil) {
+        this.validateUtil = validateUtil;
         this.orderService = orderService;
     }
 
     @PostMapping
     @Operation(summary = "Create an order", description = "Saves a new order and returns the created order.")
-    public ResponseEntity<?> save(@RequestHeader("idempotency-key") String idempotencyKey,
+    public ResponseEntity<?> save(@RequestHeader(value = "idempotency-key", required = false) HeaderDto idempotencyKey,
             @RequestBody OrderRequestDto orderRequestDto) throws BusinessException {
-        OrderResponseDto dto = orderService.createOrder(idempotencyKey, orderRequestDto);
+        validateUtil.validatePost(idempotencyKey, orderRequestDto);
+        OrderResponseDto dto = orderService.createOrder(idempotencyKey.idempotencyKey(), orderRequestDto);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
