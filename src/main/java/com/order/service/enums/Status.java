@@ -1,5 +1,5 @@
 package com.order.service.enums;
 
-public enum OrderStatus {
+public enum Status {
     PROCESSING, COMPLETED, CANCELED;
 }

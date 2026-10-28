@@ -7,7 +7,7 @@ import static com.order.service.constants.Constants.DESCRIPTION_ERROR;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.order.service.enums.OrderStatus;
+import com.order.service.enums.Status;
 import com.order.service.model.OrderModel;
 
 import jakarta.validation.constraints.Min;
@@ -23,7 +23,7 @@ public record OrderRequestDto(
         @JsonIgnore LocalDateTime createdAt) {
 
     public OrderRequestDto {
-        status = OrderStatus.PROCESSING.toString();
+        status = Status.PROCESSING.toString();
         createdAt = LocalDateTime.now();
     }
 

@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 
 import com.order.service.dto.OrderRequestDto;
 import com.order.service.dto.OrderResponseDto;
-import com.order.service.enums.OrderStatus;
+import com.order.service.enums.Status;
 import com.order.service.exception.BusinessException;
 
 class OrderServiceTest {
@@ -31,10 +31,9 @@ class OrderServiceTest {
 
     @BeforeEach
     void setUp() {
-        idempotencyService = mock(IdempotencyService.class);
         orderDataService = mock(OrderDataService.class);
         orderEventService = mock(OrderEventService.class);
-        orderService = new OrderService(orderDataService, orderEventService, idempotencyService);
+        orderService = new OrderService(orderDataService, orderEventService);
     }
 
     @Test
@@ -60,7 +59,7 @@ class OrderServiceTest {
                 null, 42, "Alex Morgan", "Replace a screen", null, null);
         when(idempotencyService.acquireLock(IDEMPOTENCY_VALUE)).thenReturn(false);
         when(idempotencyService.getStoredResponse(IDEMPOTENCY_VALUE))
-                .thenReturn(OrderStatus.PROCESSING.toString());
+                .thenReturn(Status.PROCESSING.toString());
 
         BusinessException exception = assertThrows(
                 BusinessException.class,

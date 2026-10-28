@@ -2,7 +2,7 @@ package com.order.service.dto;
 
 import java.time.LocalDateTime;
 
-import com.order.service.enums.OrderStatus;
+import com.order.service.enums.Status;
 import com.order.service.model.OrderModel;
 
 public record OrderResponseDto(
@@ -14,7 +14,7 @@ public record OrderResponseDto(
         LocalDateTime createdAt) {
 
     public OrderResponseDto {
-        status = OrderStatus.PROCESSING.toString();
+        status = Status.PROCESSING.toString();
         createdAt = LocalDateTime.now();
     }
 

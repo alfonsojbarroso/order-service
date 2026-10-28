@@ -7,7 +7,7 @@ import java.time.Duration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.order.service.enums.OrderStatus;
+import com.order.service.enums.Status;
 
 @Service
 public class IdempotencyService {
@@ -21,7 +21,7 @@ public class IdempotencyService {
     public boolean acquireLock(String idempotencyKey) {
         String redisKey = IDEMPOTENCY_PREFIX + idempotencyKey;
         Boolean isNew = stringRedisTemplate.opsForValue()
-                .setIfAbsent(redisKey, OrderStatus.PROCESSING.toString(), Duration.ofHours(24));
+                .setIfAbsent(redisKey, Status.PROCESSING.toString(), Duration.ofHours(24));
         return Boolean.TRUE.equals(isNew);
     }
 
