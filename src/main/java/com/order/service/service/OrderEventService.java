@@ -9,29 +9,29 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import com.order.service.dto.OrderRequestDto;
+import com.order.service.dto.OrderResponseDto;
 
 @Service
 public class OrderEventService {
 
-    @Value("${spring.kafka.consumer.topic}")
+    @Value("${app.kafka.topics.order-events}")
     private String kafkaTopic;
-    private final KafkaTemplate<String, OrderRequestDto> kafkaTemplate;
+    private final KafkaTemplate<String, OrderResponseDto> kafkaTemplate;
 
-    public OrderEventService(KafkaTemplate<String, OrderRequestDto> kafkaTemplate) {
+    public OrderEventService(KafkaTemplate<String, OrderResponseDto> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public OrderRequestDto createOrder(String idempotencyKey, OrderRequestDto orderRequestDto) {
-        kafkaTemplate.send(createProducerRecord(idempotencyKey, orderRequestDto));
-        return orderRequestDto;
+    public OrderResponseDto createOrder(String idempotencyKey, OrderResponseDto orderResponseDto) {
+        kafkaTemplate.send(createProducerRecord(idempotencyKey, orderResponseDto));
+        return orderResponseDto;
     }
 
-    private ProducerRecord<String, OrderRequestDto> createProducerRecord(String idempotencyKey,
-            OrderRequestDto orderRequestDto) {
+    private ProducerRecord<String, OrderResponseDto> createProducerRecord(String idempotencyKey,
+            OrderResponseDto orderRequestDto) {
 
-        ProducerRecord<String, OrderRequestDto> record = new ProducerRecord<>(kafkaTopic,
-                orderRequestDto.customerId().toString(),
+        ProducerRecord<String, OrderResponseDto> record = new ProducerRecord<>(kafkaTopic,
+                orderRequestDto.id(),
                 orderRequestDto);
         record.headers().add(IDEMPOTENCY_KEY, idempotencyKey.getBytes(StandardCharsets.UTF_8));
 

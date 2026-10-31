@@ -23,7 +23,7 @@ public class OrderService {
             throws BusinessException {
 
         OrderResponseDto orderResponseDto = orderDataService.save(orderRequestDto);
-        orderEventService.createOrder(idempotencyKey, orderRequestDto);
+        orderEventService.createOrder(idempotencyKey, orderResponseDto);
         return orderResponseDto;
     }
 
