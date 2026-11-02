@@ -8,6 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import tools.jackson.databind.ObjectMapper;
 
 @Entity
 @Table(name = "orders")
@@ -83,6 +84,11 @@ public class OrderModel {
 
     public void setCreatedAt(Long createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return new ObjectMapper().writeValueAsString(this);
     }
 
 }

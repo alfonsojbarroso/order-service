@@ -6,8 +6,8 @@ public class BusinessException extends Exception {
 
     private final ErrorDto errorResponseDto;
 
-    public BusinessException(String message, ErrorDto errorResponseDto) {
-        super(message);
+    public BusinessException(ErrorDto errorResponseDto) {
+        super(errorResponseDto.message());
         this.errorResponseDto = errorResponseDto;
     }
 

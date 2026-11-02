@@ -1,6 +1,7 @@
 package com.order.service.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class OrderService {
         return orderDataService.fetchAll();
     }
 
-    public OrderDto findById(String id) {
+    public OrderDto findById(UUID id) {
         return orderDataService.findById(id);
     }
 

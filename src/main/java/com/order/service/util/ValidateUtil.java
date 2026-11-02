@@ -34,14 +34,14 @@ public class ValidateUtil {
         if (obj == null) {
             errorResponseDto = new ErrorDto(HttpStatus.BAD_REQUEST,
                     INVALID_INPUT);
-            throw new BusinessException(INVALID_INPUT, errorResponseDto);
+            throw new BusinessException(new ErrorDto(HttpStatus.BAD_REQUEST, INVALID_INPUT));
         }
         Set<ConstraintViolation<T>> violations = validator.validate(obj);
         if (!violations.isEmpty()) {
             String message = violations.stream().findFirst().get().getMessage();
             errorResponseDto = new ErrorDto(HttpStatus.BAD_REQUEST,
                     message);
-            throw new BusinessException(message, errorResponseDto);
+            throw new BusinessException(new ErrorDto(HttpStatus.BAD_REQUEST, INVALID_INPUT));
         }
     }
 

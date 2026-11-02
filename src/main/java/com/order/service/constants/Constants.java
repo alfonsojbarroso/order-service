@@ -11,6 +11,7 @@ public class Constants {
     public static final String CUSTOMER_ID_ERROR = "Customer id is not valid";
     public static final String DESCRIPTION_ERROR = "Description is not valid";
     public static final String INVALID_INPUT = "Invalid input";
+    public static final String RECORD_NOT_FOUND = "Record not found";
 
     private Constants() {
     }

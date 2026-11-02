@@ -1,6 +1,8 @@
 package com.order.service.controller;
 
 import java.util.List;
+import java.util.UUID;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -51,7 +53,7 @@ public class OrderController {
     @GetMapping("/by-id")
     @Operation(summary = "Get an order by ID", description = "Returns the order matching the supplied ID.")
     public ResponseEntity<?> findById(@RequestParam(name = "id") String id) {
-        OrderDto dto = orderService.findById(id.trim());
+        OrderDto dto = orderService.findById(UUID.fromString(id));
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
