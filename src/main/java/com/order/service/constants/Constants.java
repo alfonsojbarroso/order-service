@@ -12,6 +12,8 @@ public class Constants {
     public static final String DESCRIPTION_ERROR = "Description is not valid";
     public static final String INVALID_INPUT = "Invalid input";
     public static final String RECORD_NOT_FOUND = "Record not found";
+    public static final String ORDER_CREATED = "Order [%s] created";
+    public static final String ORDER_UPDATED = "Order [%s] updated";
 
     private Constants() {
     }

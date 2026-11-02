@@ -16,7 +16,8 @@ public class OrderEventConsumer {
         this.dataService = dataService;
     }
 
-    @KafkaListener(topics = "${app.kafka.topics.billing-events}", groupId = "${spring.kafka.consumer.group-id}")
+    @KafkaListener(topics = "${app.kafka.topics.billing-events}", 
+    groupId = "${spring.kafka.consumer.group-id}")
     public void confirmOrder(BillingDto billingDto) throws BusinessException {
         dataService.updateOrder(billingDto);
     }
