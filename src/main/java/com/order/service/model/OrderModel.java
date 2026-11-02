@@ -1,54 +1,88 @@
 package com.order.service.model;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
-import com.order.service.dto.OrderResponseDto;
+import com.order.service.dto.OrderDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "orders")
 public class OrderModel {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @Column(name = "order_id", columnDefinition = "uuid")
+    private UUID orderId;
     @Column(name = "customer_id", columnDefinition = "int")
     private Integer customerId;
-    @Column(name = "customer_name", columnDefinition = "varchar(80)")
-    private String customerName;
-    @Column(name = "service_description", columnDefinition = "text")
-    private String serviceDescription;
-    @Column(name = "status", columnDefinition = "varchar(20)")
+    @Column(name = "description", columnDefinition = "text")
+    private String description;
+    @Column(name = "status", columnDefinition = "char(15)")
     private String status;
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = "created_at", columnDefinition = "bigint")
+    private Long createdAt;
+
+    public OrderDto toDto() {
+        return new OrderDto(
+                orderId,
+                customerId,
+                description,
+                status,
+                createdAt);
+    }
 
     public OrderModel() {
     }
 
-    public OrderModel(String id, Integer customerId, String customerName, String serviceDescription, String status,
-            LocalDateTime createdAt) {
-        this.id = id;
+    public OrderModel(UUID orderId, Integer customerId, String description, String status, Long createdAt) {
+        this.orderId = orderId;
         this.customerId = customerId;
-        this.customerName = customerName;
-        this.serviceDescription = serviceDescription;
+        this.description = description;
         this.status = status;
         this.createdAt = createdAt;
     }
 
-    public OrderResponseDto toRequestDto() {
-        return new OrderResponseDto(
-                this.id,
-                this.customerId,
-                this.customerName,
-                this.serviceDescription,
-                this.status,
-                this.createdAt);
+    public UUID getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(UUID orderId) {
+        this.orderId = orderId;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Long createdAt) {
+        this.createdAt = createdAt;
     }
 
 }

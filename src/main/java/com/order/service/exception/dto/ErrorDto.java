@@ -1,13 +1,13 @@
-package com.order.service.dto;
+package com.order.service.exception.dto;
 
 import org.springframework.http.HttpStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import tools.jackson.databind.ObjectMapper;
 
-public record ErrorResponseDto(@JsonIgnore HttpStatus httpStatus, Integer statusCode, String message, Long timeStamp) {
+public record ErrorDto(@JsonIgnore HttpStatus httpStatus, Integer statusCode, String message, Long timeStamp) {
 
-    public ErrorResponseDto(HttpStatus httpStatus, String message) {
+    public ErrorDto(HttpStatus httpStatus, String message) {
         this(httpStatus, httpStatus.value(), message, System.currentTimeMillis());
     }
 

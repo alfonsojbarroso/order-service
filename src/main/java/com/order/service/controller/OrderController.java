@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.order.service.dto.HeaderDto;
-import com.order.service.dto.OrderRequestDto;
-import com.order.service.dto.OrderResponseDto;
+import com.order.service.dto.OrderDto;
 import com.order.service.exception.BusinessException;
 import com.order.service.service.OrderService;
 import com.order.service.util.ValidateUtil;;
@@ -36,23 +35,23 @@ public class OrderController {
     @PostMapping
     @Operation(summary = "Create an order", description = "Saves a new order and returns the created order.")
     public ResponseEntity<?> save(@RequestHeader(value = "idempotency-key", required = false) HeaderDto idempotencyKey,
-            @RequestBody OrderRequestDto orderRequestDto) throws BusinessException {
-        validateUtil.validatePost(idempotencyKey, orderRequestDto);
-        OrderResponseDto dto = orderService.createOrder(idempotencyKey.idempotencyKey(), orderRequestDto);
+            @RequestBody OrderDto orderDto) throws BusinessException {
+        validateUtil.validatePost(idempotencyKey, orderDto);
+        OrderDto dto = orderService.createOrder(idempotencyKey.idempotencyKey(), orderDto);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping
     @Operation(summary = "Get all orders", description = "Returns all orders.")
     public ResponseEntity<?> findAll() {
-        List<OrderResponseDto> list = orderService.fetchAll();
+        List<OrderDto> list = orderService.fetchAll();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/by-id")
     @Operation(summary = "Get an order by ID", description = "Returns the order matching the supplied ID.")
     public ResponseEntity<?> findById(@RequestParam(name = "id") String id) {
-        OrderResponseDto dto = orderService.findById(id.trim());
+        OrderDto dto = orderService.findById(id.trim());
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 

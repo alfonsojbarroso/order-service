@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.order.service.dto.OrderRequestDto;
-import com.order.service.dto.OrderResponseDto;
+import com.order.service.dto.OrderDto;
 import com.order.service.model.OrderModel;
 import com.order.service.repository.OrderRepository;
 
@@ -18,16 +17,16 @@ public class OrderDataService {
         this.orderRepository = orderRepository;
     }
 
-    public OrderResponseDto save(OrderRequestDto orderRequestDto) {
-        return orderRepository.save(orderRequestDto.toModel()).toRequestDto();
+    public OrderDto save(OrderDto orderDto) {
+        return orderRepository.save(orderDto.toModel()).toDto();
     }
 
-    public List<OrderResponseDto> fetchAll() {
-        return orderRepository.findAll().stream().map(OrderModel::toRequestDto).toList();
+    public List<OrderDto> fetchAll() {
+        return orderRepository.findAll().stream().map(OrderModel::toDto).toList();
     }
 
-    public OrderResponseDto findById(String id) {
-        return orderRepository.findById(id).get().toRequestDto();
+    public OrderDto findById(String id) {
+        return orderRepository.findById(id).get().toDto();
     }
 
 }

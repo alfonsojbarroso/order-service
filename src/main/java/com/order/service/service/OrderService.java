@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.order.service.dto.OrderRequestDto;
-import com.order.service.dto.OrderResponseDto;
+import com.order.service.dto.OrderDto;
 import com.order.service.exception.BusinessException;
 
 @Service
@@ -19,19 +18,18 @@ public class OrderService {
         this.orderEventService = orderEventService;
     }
 
-    public OrderResponseDto createOrder(String idempotencyKey, OrderRequestDto orderRequestDto)
+    public OrderDto createOrder(String idempotencyKey, OrderDto orderDto)
             throws BusinessException {
-
-        OrderResponseDto orderResponseDto = orderDataService.save(orderRequestDto);
-        orderEventService.createOrder(idempotencyKey, orderResponseDto);
-        return orderResponseDto;
+        orderDataService.save(orderDto);
+        orderEventService.createOrder(idempotencyKey, orderDto);
+        return orderDto;
     }
 
-    public List<OrderResponseDto> fetchAll() {
+    public List<OrderDto> fetchAll() {
         return orderDataService.fetchAll();
     }
 
-    public OrderResponseDto findById(String id) {
+    public OrderDto findById(String id) {
         return orderDataService.findById(id);
     }
 
