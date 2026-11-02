@@ -40,3 +40,12 @@ app:
     topics:
       order-events: "order-events-topic"
       billing-events: "billing-events-topic"
+
+
+logging:
+  level:
+    root: INFO
+    com.order.service: DEBUG
+    org.springframework.kafka: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"

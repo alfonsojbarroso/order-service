@@ -1,12 +1,17 @@
 package com.order.service.service;
 
+import static com.order.service.constants.Constants.ORDER_CREATED;
+import static com.order.service.constants.Constants.ORDER_UPDATED;
 import static com.order.service.constants.Constants.RECORD_NOT_FOUND;
 
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.order.service.dto.BillingDto;
 import com.order.service.dto.OrderDto;
@@ -19,6 +24,7 @@ import com.order.service.repository.OrderRepository;
 @Service
 public class OrderDataService {
 
+    private static final Logger log = LoggerFactory.getLogger(OrderDataService.class);
     private final OrderRepository orderRepository;
 
     public OrderDataService(OrderRepository orderRepository) {
@@ -26,10 +32,13 @@ public class OrderDataService {
     }
 
     public OrderDto save(OrderDto orderDto) {
+        log.info(ORDER_CREATED.formatted(orderDto.orderId()));
         return orderRepository.save(orderDto.toModel()).toDto();
     }
 
+    @Transactional
     public void updateOrder(BillingDto billingDto) throws BusinessException {
+        log.info(ORDER_UPDATED.formatted(billingDto.orderId()));
         OrderModel orderModel = orderRepository.findById(billingDto.orderId())
                 .orElseThrow(() -> new BusinessException(new ErrorDto(HttpStatus.NOT_FOUND, RECORD_NOT_FOUND)));
         if (orderModel.getStatus().trim().equalsIgnoreCase(StatusType.PROCESSING.toString())) {
