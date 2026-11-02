@@ -18,7 +18,6 @@ import jakarta.validation.Validator;
 @Component
 public class ValidateUtil {
 
-    private ErrorDto errorResponseDto;
     private final Validator validator;
 
     public ValidateUtil(Validator validator) {
@@ -32,16 +31,12 @@ public class ValidateUtil {
 
     private <T> void violationCheck(T obj) throws BusinessException {
         if (obj == null) {
-            errorResponseDto = new ErrorDto(HttpStatus.BAD_REQUEST,
-                    INVALID_INPUT);
             throw new BusinessException(new ErrorDto(HttpStatus.BAD_REQUEST, INVALID_INPUT));
         }
         Set<ConstraintViolation<T>> violations = validator.validate(obj);
         if (!violations.isEmpty()) {
             String message = violations.stream().findFirst().get().getMessage();
-            errorResponseDto = new ErrorDto(HttpStatus.BAD_REQUEST,
-                    message);
-            throw new BusinessException(new ErrorDto(HttpStatus.BAD_REQUEST, INVALID_INPUT));
+            throw new BusinessException(new ErrorDto(HttpStatus.BAD_REQUEST, message));
         }
     }
 

@@ -1,4 +1,4 @@
-package com.order.service.service;
+package com.order.service.messaging;
 
 import static com.order.service.constants.Constants.IDEMPOTENCY_KEY;
 
@@ -12,17 +12,17 @@ import org.springframework.stereotype.Component;
 import com.order.service.dto.OrderDto;
 
 @Component
-public class OrderEventService {
+public class OrderEventProducer {
 
     @Value("${app.kafka.topics.order-events}")
     private String kafkaTopic;
     private final KafkaTemplate<UUID, OrderDto> kafkaTemplate;
 
-    public OrderEventService(KafkaTemplate<UUID, OrderDto> kafkaTemplate) {
+    public OrderEventProducer(KafkaTemplate<UUID, OrderDto> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public OrderDto createOrder(String idempotencyKey, OrderDto orderResponseDto) {
+    public OrderDto produceOrder(String idempotencyKey, OrderDto orderResponseDto) {
         kafkaTemplate.send(createProducerRecord(idempotencyKey, orderResponseDto));
         return orderResponseDto;
     }

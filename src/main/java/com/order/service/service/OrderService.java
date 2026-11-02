@@ -7,22 +7,23 @@ import org.springframework.stereotype.Service;
 
 import com.order.service.dto.OrderDto;
 import com.order.service.exception.BusinessException;
+import com.order.service.messaging.OrderEventProducer;
 
 @Service
 public class OrderService {
 
     private final OrderDataService orderDataService;
-    private final OrderEventService orderEventService;
+    private final OrderEventProducer orderEventProducer;
 
-    public OrderService(OrderDataService orderDataService, OrderEventService orderEventService) {
+    public OrderService(OrderDataService orderDataService, OrderEventProducer orderEventService) {
         this.orderDataService = orderDataService;
-        this.orderEventService = orderEventService;
+        this.orderEventProducer = orderEventService;
     }
 
     public OrderDto createOrder(String idempotencyKey, OrderDto orderDto)
             throws BusinessException {
         orderDataService.save(orderDto);
-        orderEventService.createOrder(idempotencyKey, orderDto);
+        orderEventProducer.produceOrder(idempotencyKey, orderDto);
         return orderDto;
     }
 
