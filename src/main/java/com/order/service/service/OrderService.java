@@ -14,16 +14,20 @@ public class OrderService {
 
     private final OrderDataService orderDataService;
     private final OrderEventProducer orderEventProducer;
+    private final NotificationService notificationService;
 
-    public OrderService(OrderDataService orderDataService, OrderEventProducer orderEventService) {
+    public OrderService(OrderDataService orderDataService, OrderEventProducer orderEventService,
+            NotificationService notificationService) {
         this.orderDataService = orderDataService;
         this.orderEventProducer = orderEventService;
+        this.notificationService = notificationService;
     }
 
     public OrderDto createOrder(String idempotencyKey, OrderDto orderDto)
             throws BusinessException {
         orderDataService.save(orderDto);
         orderEventProducer.produceOrder(idempotencyKey, orderDto);
+        notificationService.triggerNotificationForOrder(orderDto);
         return orderDto;
     }
 
