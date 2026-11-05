@@ -3,6 +3,7 @@ server:
 
 url:
   order: orders
+  notification-service: http://localhost:8092
 
 spring:
   datasource:
@@ -10,11 +11,12 @@ spring:
     username: postgres
     password: 
     driver-class-name: org.postgresql.Driver
-  cache-ttl: 36000
+    # Cofiguración de TTL, para Redis
+  cache-ttl: 36000 #86400
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update # En producción usar tools como Flyway o validate
     show-sql: true
     properties:
       hibernate:
@@ -40,12 +42,34 @@ app:
     topics:
       order-events: "order-events-topic"
       billing-events: "billing-events-topic"
-
+      
+resilience4j:
+  circuitbreaker:
+    circuitBreakerAspectOrder: 1 # Envuelve por fuera (es el primero en evaluar)
+    instances:
+      notificationService:
+        registerHealthIndicator: true
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        failureRateThreshold: 50.0
+        slowCallRateThreshold: 50.0
+        slowCallDurationThreshold: 2s
+        waitDurationInState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+  retry:
+    retryAspectOrder: 2 # Se ejecuta por dentro (maneja los intentos)
+    instances:
+      notificationServiceRetry:
+        maxAttempts: 3 # Intento inicial + 2 reintentos adicionales
+        waitDuration: 5s # Espera de 5 segundos entre cada intento
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
 
 logging:
   level:
-    root: INFO
-    com.order.service: DEBUG
+    root: WARN
+    com.order.service: INFO
     org.springframework.kafka: INFO
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
